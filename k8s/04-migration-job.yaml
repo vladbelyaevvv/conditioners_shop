@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: climate-store-db-init
+  namespace: climate-store
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: climate-store-db-init
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: db-init
+          image: climate-store-backend:1.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: climate-store-config
+            - secretRef:
+                name: climate-store-secret
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - npm run db:migrate -w backend && npm run db:seed -w backend

@@ -1,0 +1,28 @@
+.card { background: #fff; border: 1px solid rgb(221 229 223 / 70%); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 26px rgb(23 61 49 / 6%); transition: transform .2s, box-shadow .2s; }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.imageLink { height: 220px; margin: 8px; position: relative; display: block; overflow: hidden; border-radius: 15px; background: var(--primary-soft); }
+.tone1 { background: var(--peach); }.tone2 { background: var(--surface); }
+.imageLink img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; transition: transform .25s; }
+.card:hover img { transform: scale(1.025); }
+.inStock, .outStock { position: absolute; top: 12px; left: 12px; padding: 6px 9px; border-radius: 20px; font-size: 11px; font-weight: 800; }
+.inStock { color: #126445; background: #dff7ea; }
+.outStock { color: #8d3940; background: #fde6e8; }
+.body { padding: 12px 18px 18px; }
+.meta { margin: 0; color: var(--muted); font-size: 12px; font-weight: 700; }
+.body h2 { margin: 6px 0 4px; font-size: 20px; }
+.body h2 a { color: var(--ink); text-decoration: none; }
+.model { color: var(--muted); margin: 0 0 18px; font-size: 14px; }
+.bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.bottom strong { font-size: 21px; }
+.details { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; color: #fff; background: var(--primary); text-decoration: none; font-size: 20px; }
+@media (max-width: 600px) {
+  .card { border-radius: 16px; }
+  .imageLink { height: 118px; margin: 6px; border-radius: 12px; }
+  .inStock, .outStock { top: 8px; left: 8px; padding: 4px 7px; font-size: 9px; }
+  .body { padding: 8px 10px 12px; }
+  .meta { font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .body h2 { margin-top: 4px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .model { margin-bottom: 10px; font-size: 10px; }
+  .bottom strong { font-size: 13px; white-space: nowrap; }
+  .details { width: 30px; height: 30px; border-radius: 9px; font-size: 16px; }
+}

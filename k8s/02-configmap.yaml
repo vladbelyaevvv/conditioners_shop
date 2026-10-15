@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: climate-store-config
+  namespace: climate-store
+data:
+  NODE_ENV: production
+  PORT: "3000"

@@ -1,0 +1,13 @@
+node_modules/
+.npm-cache/
+dist/
+.env
+.env.*
+!.env.example
+coverage/
+*.log
+.DS_Store
+/k8s/01-secret.yaml
+/k8s.zip
+/k8s/00-namespace.yaml - conditioners - Visual Studio Code 2026-10-07 18-55-39.mp4
+/kubectl.exe

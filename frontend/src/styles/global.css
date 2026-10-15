@@ -1,0 +1,35 @@
+:root {
+  font-family: "Manrope Variable", Manrope, ui-sans-serif, system-ui, sans-serif;
+  color: #173d31;
+  background: #f7f8f4;
+  font-synthesis: none;
+  --ink: #173d31;
+  --muted: #718078;
+  --primary: #1f5a45;
+  --primary-dark: #164535;
+  --primary-soft: #dff0a8;
+  --surface: #eff4ef;
+  --peach: #f5e7d6;
+  --border: #dde5df;
+  --danger: #a5424b;
+  --shadow: 0 16px 40px rgb(23 61 49 / 9%);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; background: #f7f8f4; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+h1, h2, h3 { color: var(--ink); line-height: 1.08; letter-spacing: -.035em; }
+a { color: inherit; }
+.eyebrow { color: var(--primary); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
+.button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; padding: 11px 18px; border: 1px solid var(--primary); border-radius: 14px; color: #fff; background: var(--primary); text-decoration: none; font-weight: 750; transition: transform .15s, background .15s, border-color .15s; }
+.button:hover { background: var(--primary-dark); border-color: var(--primary-dark); transform: translateY(-1px); }
+.button:disabled { opacity: .55; cursor: not-allowed; }
+.buttonSecondary { color: var(--ink); background: #fff; border-color: var(--border); }
+.buttonSecondary:hover { color: var(--primary-dark); background: var(--surface); border-color: var(--border); }
+.buttonDanger { color: var(--danger); background: #fff; border-color: #efcfd2; }
+.buttonDanger:hover { color: #fff; background: var(--danger); border-color: var(--danger); }
+.buttonSmall { min-height: 38px; padding: 8px 12px; border-radius: 11px; font-size: 13px; }
+.status { margin: 20px 0; padding: 28px; color: var(--muted); background: #fff; border: 1px dashed var(--border); border-radius: 18px; text-align: center; }
+.status.error { color: #8d3940; background: #fff4f5; border-color: #f0cdd0; }
+:focus-visible { outline: 3px solid rgb(31 90 69 / 25%); outline-offset: 3px; }

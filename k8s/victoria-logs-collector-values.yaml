@@ -1,0 +1,14 @@
+remoteWrite:
+  - url: http://vlogs-victoria-logs-single-server.climate-store.svc:9428/insert/native
+
+collector:
+  includePodLabels: true
+  excludeFilter: 'kubernetes.pod_namespace:in(kube-system) or kubernetes.pod_name:=%{HOSTNAME}'
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
