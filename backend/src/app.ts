@@ -6,6 +6,7 @@ import { config } from "./config.js";
 import { errorHandler } from "./http.js";
 import { brandsRouter, categoriesRouter } from "./routes/entities.js";
 import { productsRouter } from "./routes/products.js";
+import { register } from "./metrics.js";
 
 export const app = express();
 
@@ -38,6 +39,10 @@ app.use(
   }),
 );
 
+app.get("/metrics", async (_req, res) => {
+  res.setHeader("Content-Type", register.contentType);
+  res.end(await register.metrics());
+});
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 app.use("/api/products", productsRouter);
 app.use("/api/brands", brandsRouter);

@@ -1,0 +1,10 @@
+grafana:
+  enabled: false
+
+vmsingle:
+  spec:
+    retentionPeriod: 7d
+    storage:
+      resources:
+        requests:
+          storage: 1Gi

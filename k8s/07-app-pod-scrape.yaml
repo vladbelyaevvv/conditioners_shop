@@ -1,0 +1,37 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: prometheus-annotations
+  namespace: monitoring
+spec:
+  jobLabel: app
+  namespaceSelector:
+    matchNames:
+      - climate-store
+  selector: {}
+  podMetricsEndpoints:
+    - relabelConfigs:
+        - action: drop
+          source_labels:
+            - __meta_kubernetes_pod_container_init
+          regex: "true"
+        - action: keep_if_equal
+          source_labels:
+            - __meta_kubernetes_pod_annotation_prometheus_io_port
+            - __meta_kubernetes_pod_container_port_number
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+          regex: "true"
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_pod_annotation_prometheus_io_path
+          target_label: __metrics_path__
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_namespace
+          target_label: namespace
+        - action: replace
+          source_labels:
+            - __meta_kubernetes_pod_name
+          target_label: pod

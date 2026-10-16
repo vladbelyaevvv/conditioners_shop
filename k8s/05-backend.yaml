@@ -32,11 +32,15 @@ spec:
     metadata:
       labels:
         app: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: "/metrics"
     spec:
       terminationGracePeriodSeconds: 15
       containers:
         - name: backend
-          image: climate-store-backend:1.1
+          image: climate-store-backend:1.2
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

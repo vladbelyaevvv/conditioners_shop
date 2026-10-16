@@ -5,7 +5,7 @@
 ## Содержимое
 
 - `00-namespace.yaml` — Namespace приложения;
-- `01-secret.yaml` — настройки подключения к PostgreSQL;
+- `01-secret.example.yaml` — шаблон секрета для подключения к PostgreSQL (перед запуском нужно задать свой пароль);
 - `02-configmap.yaml` — открытая конфигурация backend;
 - `03-postgres.yaml` — Service, StatefulSet и PVC PostgreSQL;
 - `04-migration-job.yaml` — Job миграции и заполнения базы;
@@ -13,8 +13,7 @@
 - `06-frontend.yaml` — Service и Deployment frontend;
 - `docker/` — копии Dockerfile, nginx-конфигурации и `.dockerignore`, использованных при сборке;
 - `Отчёт.md` — описание Kubernetes-абстракций и взаимодействия сервисов;
-- `Сценарий-скринкаста.md` — порядок демонстрации;
-- видеофайл — запись развёртывания, масштабирования и работы UI.
+- запись демонстрации прикладывается к сдаче отдельно.
 
 Docker-образы собираются из корня полного проекта:
 
@@ -26,6 +25,12 @@ minikube image load climate-store-frontend:1.0
 ```
 
 ## Развёртывание
+
+Реальный `01-secret.yaml` с паролем не хранится в Git. Перед развёртыванием скопируй шаблон, замени `REPLACE_WITH_A_LOCAL_PASSWORD` на свой пароль в обоих местах и примени получившийся файл:
+
+```bash
+cp k8s/01-secret.example.yaml k8s/01-secret.yaml
+```
 
 ```bash
 kubectl apply -f k8s/00-namespace.yaml
