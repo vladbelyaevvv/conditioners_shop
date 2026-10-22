@@ -40,7 +40,7 @@ spec:
       terminationGracePeriodSeconds: 15
       containers:
         - name: backend
-          image: climate-store-backend:1.2
+          image: climate-store-backend:1.4
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

@@ -6,7 +6,7 @@ import { config } from "./config.js";
 import { errorHandler } from "./http.js";
 import { brandsRouter, categoriesRouter } from "./routes/entities.js";
 import { productsRouter } from "./routes/products.js";
-import { register } from "./metrics.js";
+import { catalogSearchFailuresTotal, productDetailFailuresTotal, register } from "./metrics.js";
 
 export const app = express();
 
@@ -44,6 +44,30 @@ app.get("/metrics", async (_req, res) => {
   res.end(await register.metrics());
 });
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
+
+app.use((req, res, next) => {
+  const isSearch =
+    req.method === "GET" &&
+    req.path === "/api/products" &&
+    typeof req.query.search === "string" &&
+    req.query.search.trim().length > 0;
+
+  const isProductDetail =
+    req.method === "GET" &&
+    /^\/api\/products\/\d+$/.test(req.path);
+
+  if (isSearch || isProductDetail) {
+    res.once("finish", () => {
+      if (res.statusCode >= 500) {
+        if (isSearch) catalogSearchFailuresTotal.inc();
+        if (isProductDetail) productDetailFailuresTotal.inc();
+      }
+    });
+  }
+
+  next();
+});
+
 app.use("/api/products", productsRouter);
 app.use("/api/brands", brandsRouter);
 app.use("/api/categories", categoriesRouter);
