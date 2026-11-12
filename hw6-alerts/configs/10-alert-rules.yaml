@@ -1,0 +1,84 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: climate-store-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: climate-store-service
+      interval: 20s
+      rules:
+        - alert: ClimateStoreCatalogUnavailable
+          expr: probe_success{job="climate-store-probe"} == 0
+          for: 1m
+          labels:
+            severity: critical
+            service: climate-store
+            namespace: climate-store
+          annotations:
+            summary: "Каталог Climate Store недоступен"
+            description: "HTTP-проверки каталога не проходят более одной минуты."
+
+        - alert: ClimateStoreSearchErrorsHigh
+          expr: |
+            (
+              100 *
+              sum(increase(climate_store_catalog_search_failures_total{job="backend",namespace="climate-store"}[5m]))
+              /
+              (
+                sum(increase(climate_store_catalog_searches_total{job="backend",namespace="climate-store"}[5m]))
+                +
+                sum(increase(climate_store_catalog_search_failures_total{job="backend",namespace="climate-store"}[5m]))
+              )
+              > 5
+            )
+            and
+            (
+              (
+                sum(increase(climate_store_catalog_searches_total{job="backend",namespace="climate-store"}[5m]))
+                +
+                sum(increase(climate_store_catalog_search_failures_total{job="backend",namespace="climate-store"}[5m]))
+              )
+              >= 20
+            )
+          for: 1m
+          labels:
+            severity: warning
+            service: climate-store
+            namespace: climate-store
+          annotations:
+            summary: "Высокая доля ошибок поиска"
+            description: "Более 5% поисков завершились ошибками 5xx за последние 5 минут, при минимум 20 учтённых запросах."
+
+    - name: climate-store-runtime
+      interval: 20s
+      rules:
+        - alert: ClimateStoreNodeMemoryHigh
+          expr: |
+            nodejs_process_resident_memory_bytes{
+              job="backend",
+              namespace="climate-store"
+            } > 0.8 * 256 * 1024 * 1024
+          for: 2m
+          labels:
+            severity: warning
+            service: climate-store
+            namespace: climate-store
+          annotations:
+            summary: "Высокое потребление памяти Node.js"
+            description: "RSS процесса backend превышает 204,8 МиБ более двух минут. Лимит контейнера — 256 МиБ."
+
+        - alert: ClimateStoreNodeEventLoopLagHigh
+          expr: |
+            nodejs_nodejs_eventloop_lag_p99_seconds{
+              job="backend",
+              namespace="climate-store"
+            } > 0.1
+          for: 1m
+          labels:
+            severity: warning
+            service: climate-store
+            namespace: climate-store
+          annotations:
+            summary: "Высокая задержка event loop Node.js"
+            description: "Задержка event loop p99 превышает 100 мс более одной минуты."

@@ -1,0 +1,33 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
+metadata:
+  name: climate-store-telegram
+  namespace: climate-store
+spec:
+  route:
+    receiver: telegram
+    matchers:
+      - 'service="climate-store"'
+    group_by:
+      - alertname
+    group_wait: 10s
+    group_interval: 30s
+    repeat_interval: 1h
+
+  receivers:
+    - name: telegram
+      telegram_configs:
+        - bot_token:
+            name: climate-store-telegram
+            key: bot-token
+          chat_id: 510035580
+          send_resolved: true
+          parse_mode: ""
+          message: |
+            Climate Store
+            Status: {{ .Status }}
+            Alert: {{ .CommonLabels.alertname }}
+            {{ range .Alerts }}
+            {{ .Annotations.summary }}
+            {{ .Annotations.description }}
+            {{ end }}
