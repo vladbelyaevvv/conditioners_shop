@@ -42,3 +42,9 @@ export const productDetailFailuresTotal = new Counter({
   name: "climate_store_product_detail_failures_total",
   help: "Product detail requests failed with a server error",
 });
+
+export const httpRequestsTotal = new Counter({
+  name: "climate_store_http_requests_total",
+  help: "Completed API requests by method and status code",
+  labelNames: ["method", "status_code"],
+});

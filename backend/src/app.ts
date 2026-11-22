@@ -6,7 +6,7 @@ import { config } from "./config.js";
 import { errorHandler } from "./http.js";
 import { brandsRouter, categoriesRouter } from "./routes/entities.js";
 import { productsRouter } from "./routes/products.js";
-import { catalogSearchFailuresTotal, productDetailFailuresTotal, register } from "./metrics.js";
+import { catalogSearchFailuresTotal, productDetailFailuresTotal, register, httpRequestsTotal } from "./metrics.js";
 
 export const app = express();
 
@@ -62,6 +62,19 @@ app.use((req, res, next) => {
         if (isSearch) catalogSearchFailuresTotal.inc();
         if (isProductDetail) productDetailFailuresTotal.inc();
       }
+    });
+  }
+
+  next();
+});
+
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/")) {
+    res.once("finish", () => {
+      httpRequestsTotal.inc({
+        method: req.method,
+        status_code: String(res.statusCode),
+      });
     });
   }
 
