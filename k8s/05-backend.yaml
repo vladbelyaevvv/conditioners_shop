@@ -19,7 +19,7 @@ metadata:
   name: backend
   namespace: climate-store
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: backend
@@ -40,11 +40,14 @@ spec:
       terminationGracePeriodSeconds: 15
       containers:
         - name: backend
-          image: climate-store-backend:1.5
+          image: climate-store-backend:1.6
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 3000
+          env:
+            - name: APP_VERSION
+              value: "v1"
           envFrom:
             - configMapRef:
                 name: climate-store-config

@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+import { hostname } from "node:os";
 import { config } from "./config.js";
 import { errorHandler } from "./http.js";
 import { brandsRouter, categoriesRouter } from "./routes/entities.js";
@@ -9,7 +10,13 @@ import { productsRouter } from "./routes/products.js";
 import { catalogSearchFailuresTotal, productDetailFailuresTotal, register, httpRequestsTotal } from "./metrics.js";
 
 export const app = express();
+const instance = hostname();
 
+app.use((_req, res, next) => {
+  res.setHeader("X-App-Version", config.APP_VERSION);
+  res.setHeader("X-App-Instance", instance);
+  next();
+});
 app.use(helmet());
 app.use(cors({ origin: config.CLIENT_ORIGIN.split(",").map((origin) => origin.trim()) }));
 app.use(express.json({ limit: "100kb" }));
@@ -23,6 +30,8 @@ app.use(
       message: "http_request",
       service: {
         name: "climate-store-backend",
+        version: config.APP_VERSION,
+        instance,
       },
       http: {
         method: (tokens.method ?? (() => ""))(req, res),
